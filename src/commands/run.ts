@@ -7,7 +7,7 @@ export default class Run extends Command {
 		command: Args.string({ description: "command to run" }),
 	};
 
-	static override description = "describe the command here";
+	static override description = "Run command and log errors";
 
 	static override examples = ["<%= config.bin %> <%= command.id %>"];
 
