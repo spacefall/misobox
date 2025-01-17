@@ -1,4 +1,5 @@
 import { Args, Command, Flags } from "@oclif/core";
+import { spawnProcess, type SpawnProcessOptions } from "../utils/spawn.js";
 
 export default class Run extends Command {
 	static override strict = false;
@@ -15,6 +16,10 @@ export default class Run extends Command {
 			char: "l",
 			description: "Enable logging for stdout",
 		}),
+		verbose: Flags.boolean({
+			char: "v",
+			description: "Print more info while running",
+		}),
 	};
 
 	public async run(): Promise<void> {
@@ -22,6 +27,19 @@ export default class Run extends Command {
 
 		this.log(
 			`running ${args.command} with args ${argv.slice(1)}, and logoutput=${flags.logoutput}`,
+		);
+
+		if (!args.command) {
+			this.error("No command provided");
+		}
+
+		spawnProcess(
+			args.command,
+			argv.slice(1) as string[],
+			{
+				logoutput: flags.logoutput,
+				verbose: flags.verbose,
+			} as SpawnProcessOptions,
 		);
 	}
 }
