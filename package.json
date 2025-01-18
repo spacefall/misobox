@@ -8,6 +8,7 @@
 	},
 	"bugs": "https://github.com/spacefall/misobox/issues",
 	"dependencies": {
+		"@inquirer/prompts": "^7.2.3",
 		"@oclif/core": "^4",
 		"chalk": "^5.4.1"
 	},
