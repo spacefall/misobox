@@ -15,7 +15,7 @@ export function spawnProcess(
 	args: string[],
 	options: SpawnProcessOptions,
 ): void {
-	const out = fs.createWriteStream(path.join(options.outdir, "misobox.jsonl"), {
+	const out = fs.createWriteStream(path.join(options.outdir, ".misobox.jsonl"), {
 		flags: "a",
 		encoding: "utf8",
 	});
@@ -34,11 +34,9 @@ export function spawnProcess(
 
 	proc.stderr.on("data", (data) => {
 		const cleanData = data.toString().trim();
-		const newlineIdx = cleanData.indexOf("\n");
 		const errObj: MisoboxFormat = {
 			timestamp: new Date().toISOString(),
 			error: cleanData,
-			short: cleanData.substring(0, newlineIdx !== -1 ? newlineIdx : 50),
 		};
 		process.stderr.write(`${chalk.red("Error:")} ${data.toString()}`);
 		out.write(`${JSON.stringify(errObj)}\n`);
