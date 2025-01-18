@@ -2,15 +2,12 @@ import chalk from "chalk";
 import * as child_process from "node:child_process";
 import * as fs from "node:fs";
 import path from "node:path";
+import type { MisoboxFormat } from "../types.js";
 
 export interface SpawnProcessOptions {
 	logoutput: boolean;
 	verbose: boolean;
 	outdir: string;
-}
-
-interface MisoboxFormat {
-	error: string;
 }
 
 export function spawnProcess(
@@ -36,7 +33,13 @@ export function spawnProcess(
 	}
 
 	proc.stderr.on("data", (data) => {
-		const errObj: MisoboxFormat = { error: data.toString() };
+		const cleanData = data.toString().trim();
+		const newlineIdx = cleanData.indexOf("\n");
+		const errObj: MisoboxFormat = {
+			timestamp: new Date().toISOString(),
+			error: cleanData,
+			short: cleanData.substring(0, newlineIdx !== -1 ? newlineIdx : 50),
+		};
 		process.stderr.write(`${chalk.red("Error:")} ${data.toString()}`);
 		out.write(`${JSON.stringify(errObj)}\n`);
 	});
