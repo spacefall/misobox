@@ -1,4 +1,4 @@
-import oclifConfig from "@oclif/prettier-config";
+import oclifConfig, { printWidth } from "@oclif/prettier-config";
 
 /**
  * @type {import("prettier").Config}
@@ -6,6 +6,7 @@ import oclifConfig from "@oclif/prettier-config";
 const config = {
   ...oclifConfig,
   semi: true,
+  printWidth: 120,
 };
 
 export default config;
