@@ -20,13 +20,18 @@ export default class Run extends Command {
 			char: "v",
 			description: "Print more info while running",
 		}),
+		outdir: Flags.string({
+			char: "o",
+			description: "Path to write misobox.jsonl to",
+			default: ".",
+		}),
 	};
 
 	public async run(): Promise<void> {
 		const { args, flags, argv } = await this.parse(Run);
 
 		this.log(
-			`running ${args.command} with args ${argv.slice(1)}, and logoutput=${flags.logoutput}`,
+			`running ${args.command} with args ${argv.slice(1)}, logging to ${flags.outdir}`,
 		);
 
 		if (!args.command) {
@@ -39,6 +44,7 @@ export default class Run extends Command {
 			{
 				logoutput: flags.logoutput,
 				verbose: flags.verbose,
+				outdir: flags.outdir,
 			} as SpawnProcessOptions,
 		);
 	}

@@ -1,9 +1,16 @@
 import chalk from "chalk";
 import * as child_process from "node:child_process";
+import * as fs from "node:fs";
+import path from "node:path";
 
 export interface SpawnProcessOptions {
 	logoutput: boolean;
 	verbose: boolean;
+	outdir: string;
+}
+
+interface MisoboxFormat {
+	error: string;
 }
 
 export function spawnProcess(
@@ -11,6 +18,10 @@ export function spawnProcess(
 	args: string[],
 	options: SpawnProcessOptions,
 ): void {
+	const out = fs.createWriteStream(path.join(options.outdir, "misobox.jsonl"), {
+		flags: "a",
+		encoding: "utf8",
+	});
 	const proc = child_process.spawn(cmd, args);
 
 	proc.stdout.setEncoding("utf8");
@@ -25,7 +36,9 @@ export function spawnProcess(
 	}
 
 	proc.stderr.on("data", (data) => {
+		const errObj: MisoboxFormat = { error: data.toString() };
 		process.stderr.write(`${chalk.red("Error:")} ${data.toString()}`);
+		out.write(`${JSON.stringify(errObj)}\n`);
 	});
 
 	proc.on("close", (code) => {
@@ -35,6 +48,7 @@ export function spawnProcess(
 			}
 			process.exitCode = code;
 		}
+		out.end();
 	});
 
 	proc.on("error", (err) => {
@@ -44,5 +58,6 @@ export function spawnProcess(
 			console.error(chalk.red.bold("Failed to execute command."));
 		}
 		process.exitCode = 1;
+		out.end();
 	});
 }
