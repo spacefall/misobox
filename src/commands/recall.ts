@@ -1,7 +1,7 @@
 import { Args, Command, Flags } from "@oclif/core";
 import * as fs from "node:fs";
 import path from "node:path";
-import { select, Separator } from "@inquirer/prompts";
+import { select } from "@inquirer/prompts";
 import type { MisoboxFormat } from "../types.js";
 import chalk from "chalk";
 
@@ -57,6 +57,9 @@ export default class Recall extends Command {
         })
         .reverse(),
     });
+    for (const line of notes[selection].context) {
+      this.log(chalk.gray(line));
+    }
     this.log(notes[selection].error);
   }
 }
