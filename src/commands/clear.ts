@@ -9,6 +9,7 @@ export default class Clear extends Command {
   static override examples = ["<%= config.bin %> <%= command.id %>"];
 
   public async run(): Promise<void> {
+    // simple y/n to not accidentally delete everything, then it just writes "" to the file
     const answer = await confirm({ message: "Clear the misobox?" });
     if (answer) {
       fs.writeFileSync(".misobox.jsonl", "");

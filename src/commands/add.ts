@@ -7,7 +7,7 @@ import { MisoboxFormat } from "../types.js";
 
 export default class Add extends Command {
   static override args = {
-    note: Args.string({ description: "note to add", shorthand: "n" }),
+    note: Args.string({ description: "Text of the note to add" }),
   };
 
   static override description = "Adds a note to the misobox.";
@@ -24,12 +24,14 @@ export default class Add extends Command {
 
     let noteText = argv.join(" ");
 
+    // If no note is provided, prompt the user for one
     if (argv.length === 0) {
       noteText = await input({
         message: "Enter a note",
       });
     }
 
+    // Create a new note object and append it to the file
     const note: MisoboxFormat = {
       context: [],
       error: noteText,
