@@ -6,7 +6,7 @@ import * as fs from "node:fs";
 import type { MisoboxFormat } from "../types.js";
 
 export default class Recall extends Command {
-  static override description = "describe the command here";
+  static override description = "Removes one or more notes from the misobox.";
 
   static override examples = ["<%= config.bin %> <%= command.id %>"];
 
