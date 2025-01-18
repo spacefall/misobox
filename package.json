@@ -8,7 +8,8 @@
 	},
 	"bugs": "https://github.com/spacefall/misobox/issues",
 	"dependencies": {
-		"@oclif/core": "^4"
+		"@oclif/core": "^4",
+		"chalk": "^5.4.1"
 	},
 	"devDependencies": {
 		"@oclif/prettier-config": "^0.2.1",
@@ -30,9 +31,15 @@
 	"engines": {
 		"node": ">=18.0.0"
 	},
-	"files": ["/bin", "/dist", "/oclif.manifest.json"],
+	"files": [
+		"/bin",
+		"/dist",
+		"/oclif.manifest.json"
+	],
 	"homepage": "https://github.com/spacefall/misobox",
-	"keywords": ["oclif"],
+	"keywords": [
+		"oclif"
+	],
 	"license": "MIT",
 	"main": "dist/index.js",
 	"type": "module",

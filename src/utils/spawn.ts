@@ -1,3 +1,4 @@
+import chalk from "chalk";
 import * as child_process from "node:child_process";
 
 export interface SpawnProcessOptions {
@@ -24,13 +25,13 @@ export function spawnProcess(
 	}
 
 	proc.stderr.on("data", (data) => {
-		process.stderr.write(`stderr:${data.toString()}`);
+		process.stderr.write(`${chalk.red("Error:")} ${data.toString()}`);
 	});
 
 	proc.on("close", (code) => {
 		if (code && code > 0) {
 			if (options.verbose) {
-				console.log("Process exited with code", code);
+				console.log(chalk.red(`Process exited with code ${code}`));
 			}
 			process.exitCode = code;
 		}
@@ -38,9 +39,9 @@ export function spawnProcess(
 
 	proc.on("error", (err) => {
 		if (options.verbose) {
-			console.error("Couldn't start subprocess\n", err);
+			console.error(chalk.red.bold("Couldn't start subprocess\n"), err);
 		} else {
-			console.error("Failed to execute command.");
+			console.error(chalk.red.bold("Failed to execute command."));
 		}
 		process.exitCode = 1;
 	});
