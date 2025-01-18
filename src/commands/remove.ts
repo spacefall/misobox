@@ -2,6 +2,7 @@ import { checkbox } from "@inquirer/prompts";
 import { Command } from "@oclif/core";
 import chalk from "chalk";
 import * as fs from "node:fs";
+import * as zlib from "node:zlib";
 
 import type { MisoboxFormat } from "../types.js";
 
@@ -14,8 +15,9 @@ export default class Recall extends Command {
     let notes: MisoboxFormat[] = [];
     // Try to read the whole file, split it by newline, remove the last empty line, and parse each line as JSON (since it's JSON Lines)
     try {
-      notes = fs
-        .readFileSync(".misobox.jsonl", "utf8")
+      const brotliNotes = fs.readFileSync(".misobox.jsonl.gz");
+      const decompressedNotes = zlib.gunzipSync(brotliNotes).toString();
+      notes = decompressedNotes
         .split("\n")
         .slice(0, -1)
         .map((line) => JSON.parse(line));
@@ -55,7 +57,7 @@ export default class Recall extends Command {
 
     // Write the remaining notes back to the file, in overwrite mode
     const newNotes = notes.map((note) => `${JSON.stringify(note)}\n`).join("");
-    fs.writeFileSync(".misobox.jsonl", newNotes);
+    fs.writeFileSync(".misobox.jsonl.gz", zlib.gzipSync(newNotes));
 
     this.log(chalk.green("✔"), chalk.bold("Notes removed"));
   }

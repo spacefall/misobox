@@ -3,6 +3,7 @@ import chalk from "chalk";
 // eslint-disable-next-line camelcase
 import * as child_process from "node:child_process";
 import * as fs from "node:fs";
+import * as zlib from "node:zlib";
 
 import type { MisoboxFormat } from "../types.js";
 
@@ -55,8 +56,8 @@ export default class Run extends Command {
     // Open a file stream, this is better than just using appendFile as it doesn't need to reopen the file
     // It also closes automatically when the process exits, so no need to worry about that, I just added out.end()
     // to the close and end events for completeness
-    const out = fs.createWriteStream(".misobox.jsonl", {
-      encoding: "utf8",
+    const out = fs.createWriteStream(".misobox.jsonl.gz", {
+      encoding: "binary",
       flags: "a",
     });
 
@@ -89,12 +90,13 @@ export default class Run extends Command {
     proc.stderr.on("data", (data) => {
       process.stdout.write(`${chalk.redBright("Error:")} ${data.toString()}`);
       const cleanData = data.toString().trim();
-      const errObj: MisoboxFormat = {
+      const noteObj: MisoboxFormat = {
         context,
         error: cleanData,
         timestamp: new Date().toISOString(),
       };
-      out.write(`${JSON.stringify(errObj)}\n`);
+
+      out.write(zlib.gzipSync(`${JSON.stringify(noteObj)}\n`));
     });
 
     // Copy exit code if not 0

@@ -2,6 +2,7 @@ import { input } from "@inquirer/prompts";
 import { Args, Command } from "@oclif/core";
 import chalk from "chalk";
 import * as fs from "node:fs";
+import * as zlib from "node:zlib";
 
 import { MisoboxFormat } from "../types.js";
 
@@ -12,10 +13,7 @@ export default class Add extends Command {
 
   static override description = "Adds a note to the misobox.";
 
-  static override examples = [
-    "<%= config.bin %> <%= command.id %>",
-    "<%= config.bin %> <%= command.id %> foo bar",
-  ];
+  static override examples = ["<%= config.bin %> <%= command.id %>", "<%= config.bin %> <%= command.id %> foo bar"];
 
   static override strict = false;
 
@@ -38,7 +36,7 @@ export default class Add extends Command {
       timestamp: new Date().toISOString(),
     };
 
-    fs.appendFileSync(".misobox.jsonl", `${JSON.stringify(note)}\n`);
+    fs.appendFileSync(".misobox.jsonl.gz", zlib.gzipSync(`${JSON.stringify(note)}\n`));
     console.log(chalk.green("✔"), chalk.bold("Note added"));
   }
 }

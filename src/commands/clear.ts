@@ -12,7 +12,7 @@ export default class Clear extends Command {
     // simple y/n to not accidentally delete everything, then it just writes "" to the file
     const answer = await confirm({ message: "Clear the misobox?" });
     if (answer) {
-      fs.writeFileSync(".misobox.jsonl", "");
+      fs.writeFileSync(".misobox.jsonl.gz", "");
       console.log(chalk.green("✔"), chalk.bold("Box cleared"));
     }
   }

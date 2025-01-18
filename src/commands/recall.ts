@@ -2,6 +2,7 @@ import { select } from "@inquirer/prompts";
 import { Command } from "@oclif/core";
 import chalk from "chalk";
 import * as fs from "node:fs";
+import * as zlib from "node:zlib";
 
 import type { MisoboxFormat } from "../types.js";
 
@@ -14,13 +15,14 @@ export default class Recall extends Command {
     let notes: MisoboxFormat[] = [];
     // Try to read the whole file, split it by newline, remove the last empty line, and parse each line as JSON (since it's JSON Lines)
     try {
-      notes = fs
-        .readFileSync(".misobox.jsonl", "utf8")
+      const brotliNotes = fs.readFileSync(".misobox.jsonl.gz");
+      const decompressedNotes = zlib.gunzipSync(brotliNotes).toString();
+      notes = decompressedNotes
         .split("\n")
         .slice(0, -1)
         .map((line) => JSON.parse(line));
-    } catch {
-      this.log(chalk.redBright("Couldn't read .misobox.jsonl"));
+    } catch (error) {
+      this.log(chalk.redBright("Couldn't read .misobox.jsonl", error));
       this.exit(1);
     }
 
