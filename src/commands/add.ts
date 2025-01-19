@@ -32,7 +32,7 @@ export default class Add extends Command {
     // Create a new note object and append it to the file
     const note: MisoboxFormat = {
       context: [],
-      error: noteText,
+      text: noteText,
       timestamp: new Date().toISOString(),
     };
 

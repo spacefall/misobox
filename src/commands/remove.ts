@@ -37,10 +37,10 @@ export default class Recall extends Command {
     // The format is as follows: index. first 50 characters of the error message... [timestamp]
     const selection = await checkbox({
       choices: notes.map((note, idx) => {
-        const newlineIdx = note.error.indexOf("\n");
+        const newlineIdx = note.text.indexOf("\n");
         const idxStr = chalk.gray(`${idx + 1}.`);
-        const shortStr = note.error.slice(0, newlineIdx === -1 || newlineIdx > 50 ? 50 : newlineIdx);
-        const ellipsis = note.error.length > 50 ? chalk.gray("...") : "";
+        const shortStr = note.text.slice(0, newlineIdx === -1 || newlineIdx > 50 ? 50 : newlineIdx);
+        const ellipsis = note.text.length > 50 ? chalk.gray("...") : "";
         const timestampStr = chalk.gray(`[${note.timestamp}]`);
         return {
           name: `${idxStr} ${shortStr}${ellipsis} ${timestampStr}`,

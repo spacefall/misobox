@@ -1,5 +1,5 @@
 export interface MisoboxFormat {
   context: string[];
-  error: string;
+  text: string;
   timestamp: string;
 }

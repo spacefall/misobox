@@ -92,7 +92,7 @@ export default class Run extends Command {
       const cleanData = data.toString().trim();
       const noteObj: MisoboxFormat = {
         context,
-        error: cleanData,
+        text: cleanData,
         timestamp: new Date().toISOString(),
       };
 
