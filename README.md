@@ -7,13 +7,15 @@ Ferment your errors like miso - aka a simple error collection/note taking tool m
 [![Downloads/week](https://img.shields.io/npm/dw/misobox.svg)](https://npmjs.org/package/misobox)
 
 <!-- toc -->
-
-- [misobox](#misobox)
-- [What is this?](#what-is-this)
-- [Features](#features)
-- [Usage](#usage)
-- [Commands](#commands)
-- [Tips](#tips)
+* [misobox](#misobox)
+* [What is this?](#what-is-this)
+* [Features](#features)
+* [Usage](#usage)
+* [Install misobox](#install-misobox)
+* [Run a command and log errors](#run-a-command-and-log-errors)
+* [Add a note manually](#add-a-note-manually)
+* [Commands](#commands)
+* [Notes](#notes)
 <!-- tocstop -->
 
 # What is this?
@@ -63,13 +65,12 @@ You can use misobox to:
 # Commands
 
 <!-- commands -->
-
-- [`misobox add [NOTE]`](#misobox-add-note)
-- [`misobox clear`](#misobox-clear)
-- [`misobox help [COMMAND]`](#misobox-help-command)
-- [`misobox recall`](#misobox-recall)
-- [`misobox remove`](#misobox-remove)
-- [`misobox run [COMMAND]`](#misobox-run-command)
+* [`misobox add [NOTE]`](#misobox-add-note)
+* [`misobox clear`](#misobox-clear)
+* [`misobox help [COMMAND]`](#misobox-help-command)
+* [`misobox recall`](#misobox-recall)
+* [`misobox remove`](#misobox-remove)
+* [`misobox run [COMMAND]`](#misobox-run-command)
 
 ## `misobox add [NOTE]`
 
@@ -189,10 +190,9 @@ EXAMPLES
 ```
 
 _See code: [src/commands/run.ts](https://github.com/spacefall/misobox/blob/v0.1.0/src/commands/run.ts)_
-
 <!-- commandsstop -->
 
-# Tips
+# Notes
 
 - When using `misobox run`, you can add "--" to prevent misobox from parsing them:
 
@@ -210,3 +210,7 @@ _See code: [src/commands/run.ts](https://github.com/spacefall/misobox/blob/v0.1.
 
 - Sometimes stdout and stderr are misalligned, this happens when a command is printing a lot of data quickly because of how node buffers stdout and stderr.
   Unfortunally, I haven't found a way to fix this yet, but I'm open to suggestions.
+
+- Some commands won't output color by default, for example ls (even if colored in your terminal), won't output color when run with misobox.
+  In this case it's because ls is actually an alias for `ls --color=auto`, which misobox doesn't use.
+  Other commands like gcc use their own method to detect if they're being run in a terminal and output color accordingly, which I still haven't figured out, so they won't output color either.
