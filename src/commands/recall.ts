@@ -38,15 +38,21 @@ export default class Recall extends Command {
     const selection = await select({
       choices: notes
         .map((note, idx) => {
-          const newlineIdx = note.text.indexOf("\n");
-          const idxStr = chalk.gray(`${idx + 1}.`);
-          const shortStr = note.text.slice(0, newlineIdx === -1 || newlineIdx > 50 ? 50 : newlineIdx);
-          const ellipsis = note.text.length > 50 ? chalk.gray("...") : "";
-          const timestampStr = chalk.gray(`[${note.timestamp}]`);
-          return {
-            name: `${idxStr} ${shortStr}${ellipsis} ${timestampStr}`,
-            value: idx,
-          };
+          try {
+            const newlineIdx = note.text.indexOf("\n");
+            const idxStr = chalk.gray(`${idx + 1}.`);
+            const shortStr = note.text.slice(0, newlineIdx === -1 || newlineIdx > 50 ? 50 : newlineIdx);
+            const ellipsis = note.text.length > 50 ? chalk.gray("...") : "";
+            const timestampStr = chalk.gray(`[${note.timestamp}]`);
+            return {
+              name: `${idxStr} ${shortStr}${ellipsis} ${timestampStr}`,
+              value: idx,
+            };
+          } catch (error) {
+            this.error(`Couldn't parse notes, .misobox is probably corrupted (${error})`);
+          }
+
+          return { value: 0 };
         })
         .reverse(),
       message: "Select a note to display",
