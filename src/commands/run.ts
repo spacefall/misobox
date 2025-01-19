@@ -56,7 +56,7 @@ export default class Run extends Command {
     // Open a file stream, this is better than just using appendFile as it doesn't need to reopen the file
     // It also closes automatically when the process exits, so no need to worry about that, I just added out.end()
     // to the close and end events for completeness
-    const out = fs.createWriteStream(".misobox.jsonl.gz", {
+    const out = fs.createWriteStream(".misobox", {
       encoding: "binary",
       flags: "a",
     });

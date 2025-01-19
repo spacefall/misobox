@@ -15,7 +15,7 @@ export default class Recall extends Command {
     let notes: MisoboxFormat[] = [];
     // Try to read the whole file, split it by newline, remove the last empty line, and parse each line as JSON (since it's JSON Lines)
     try {
-      const brotliNotes = fs.readFileSync(".misobox.jsonl.gz");
+      const brotliNotes = fs.readFileSync(".misobox");
       const decompressedNotes = zlib.gunzipSync(brotliNotes).toString();
       notes = decompressedNotes
         .split("\n")
@@ -57,7 +57,7 @@ export default class Recall extends Command {
 
     // Write the remaining notes back to the file, in overwrite mode
     const newNotes = notes.map((note) => `${JSON.stringify(note)}\n`).join("");
-    fs.writeFileSync(".misobox.jsonl.gz", zlib.gzipSync(newNotes));
+    fs.writeFileSync(".misobox", zlib.gzipSync(newNotes));
 
     this.log(chalk.green("✔"), chalk.bold("Notes removed"));
   }

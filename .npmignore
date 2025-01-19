@@ -19,5 +19,5 @@ tsconfig.json
 .eslintrc.json
 .eslintignore
 
-.misobox.jsonl.gz
+.misobox
 

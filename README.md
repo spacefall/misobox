@@ -43,7 +43,7 @@ misobox run -- gcc -o myprog myprog.c
 misobox add "Need to fix memory leak in worker thread"
 ```
 
-After running `misobox run` or `misobox add`, a file containing all the notes will be created in the current folder (`.misobox.jsonl.gz`).
+After running `misobox run` or `misobox add`, a file containing all the notes will be created in the current folder (`.misobox`).
 
 You can use misobox to:
 

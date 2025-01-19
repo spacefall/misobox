@@ -36,7 +36,7 @@ export default class Add extends Command {
       timestamp: new Date().toISOString(),
     };
 
-    fs.appendFileSync(".misobox.jsonl.gz", zlib.gzipSync(`${JSON.stringify(note)}\n`));
+    fs.appendFileSync(".misobox", zlib.gzipSync(`${JSON.stringify(note)}\n`));
     console.log(chalk.green("✔"), chalk.bold("Note added"));
   }
 }

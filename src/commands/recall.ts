@@ -15,7 +15,7 @@ export default class Recall extends Command {
     let notes: MisoboxFormat[] = [];
     // Try to read the whole file, split it by newline, remove the last empty line, and parse each line as JSON (since it's JSON Lines)
     try {
-      const brotliNotes = fs.readFileSync(".misobox.jsonl.gz");
+      const brotliNotes = fs.readFileSync(".misobox");
       const decompressedNotes = zlib.gunzipSync(brotliNotes).toString();
       notes = decompressedNotes
         .split("\n")
@@ -38,10 +38,10 @@ export default class Recall extends Command {
     const selection = await select({
       choices: notes
         .map((note, idx) => {
-          const newlineIdx = note.error.indexOf("\n");
+          const newlineIdx = note.text.indexOf("\n");
           const idxStr = chalk.gray(`${idx + 1}.`);
-          const shortStr = note.error.slice(0, newlineIdx === -1 || newlineIdx > 50 ? 50 : newlineIdx);
-          const ellipsis = note.error.length > 50 ? chalk.gray("...") : "";
+          const shortStr = note.text.slice(0, newlineIdx === -1 || newlineIdx > 50 ? 50 : newlineIdx);
+          const ellipsis = note.text.length > 50 ? chalk.gray("...") : "";
           const timestampStr = chalk.gray(`[${note.timestamp}]`);
           return {
             name: `${idxStr} ${shortStr}${ellipsis} ${timestampStr}`,
@@ -57,6 +57,6 @@ export default class Recall extends Command {
       this.log(chalk.gray(line));
     }
 
-    this.log(notes[selection].error);
+    this.log(notes[selection].text);
   }
 }
