@@ -1,7 +1,7 @@
 {
   "name": "misobox",
   "description": "ferment your errors like miso",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "author": "spacefall",
   "bin": {
     "misobox": "./bin/run.js"
