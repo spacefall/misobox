@@ -25,7 +25,7 @@ You can also add manual notes to the log, to keep track of what you were doing a
 
 - **Error Collection**: Automatically captures stderr output from any command
 - **Note Taking**: Add manual notes alongside automated error collection
-- **Compressed Storage**: Efficiently stores error logs in a compressed JSONL format
+- **Compressed Storage**: Stores error logs in a GZip compressed JSONL format
 - **Universal Support**: Works with any command-line tool or script
 
 # Usage
