@@ -88,7 +88,7 @@ export default class Run extends Command {
 
     // If an error occurs, log it to the console and write it to the file
     proc.stderr.on("data", (data) => {
-      process.stdout.write(`${chalk.redBright("Error:")} ${data.toString()}`);
+      process.stderr.write(`${chalk.redBright("Error:")} ${data.toString()}`);
       const cleanData = data.toString().trim();
       const noteObj: MisoboxFormat = {
         context,
