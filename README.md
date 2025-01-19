@@ -1,6 +1,6 @@
 # misobox
 
-ferment your errors like miso
+Ferment your errors like miso - aka a simple error collection/note taking tool made with TS and oclif
 
 [![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
 [![Version](https://img.shields.io/npm/v/misobox.svg)](https://npmjs.org/package/misobox)
@@ -10,7 +10,7 @@ ferment your errors like miso
 
 - [misobox](#misobox)
 - [What is this?](#what-is-this)
-- [Why?](#why)
+- [Features](#features)
 - [Usage](#usage)
 - [Commands](#commands)
 - [Tips](#tips)
@@ -18,37 +18,47 @@ ferment your errors like miso
 
 # What is this?
 
-misobox is a small tool that runs a command and collects all errors (stderr) to review later.
-It's especially useful for the development of projects that can error out but continue working, for example web servers (if a page/api breaks the server remains available for other pages), here misobox can help by collecting errors without having to read though lines of logs.
+misobox is a lightweight CLI tool that captures and preserves error messages (from stderr) from your projects for later review.
+You can also add manual notes to the log, to keep track of what you were doing at the time or to add an issue that isn't caught by the automated error collection (i.e memory leaks).
 
-# Why?
+# Features
 
-misobox was made for two very simple reasons:
-
-- I tend to walk away from projects for a while and having something that keeps record of issues to fix (imo) can be useful.
-- I also tend to be lazy in terms of logging so often I just print to console, which is useful in the moment but not as much after the shell is closed.
+- **Error Collection**: Automatically captures stderr output from any command
+- **Note Taking**: Add manual notes alongside automated error collection
+- **Compressed Storage**: Efficiently stores error logs in a compressed JSONL format
+- **Universal Support**: Works with any command-line tool or script
 
 # Usage
 
-Using misobox is quite simple:
+Using misobox is simple, just install it with you package manager of choice and run your commands with `misobox run` or add manual notes with `misobox add`.
 
-<!-- usage -->
+```sh
+# Install misobox
+npm install -g misobox
 
-```sh-session
-$ npm install -g misobox
-$ misobox COMMAND
-running command...
-$ misobox (--version)
-misobox/0.1.0 linux-x64 node-v23.6.0
-$ misobox --help [COMMAND]
-USAGE
-  $ misobox COMMAND
-...
+# Run a command and log errors
+misobox run -- gcc -o myprog myprog.c
+
+# Add a note manually
+misobox add "Need to fix memory leak in worker thread"
 ```
 
-<!-- usagestop -->
+After running `misobox run` or `misobox add`, a file containing all the notes will be created in the current folder (`.misobox.jsonl.gz`).
 
-After running `misobox run` or `misobox add` a file containing all the notes will be created in the current folder (`.misobox.jsonl.gz`).
+You can use misobox to:
+
+- Log test failures for later investigation
+  ```sh
+  misobox run npm test
+  ```
+- Track non fatal compilation errors
+  ```s
+  misobox run -- gcc -o myprog myprog.c
+  ```
+- Take notes about issues you encounter
+  ```sh-session
+  misobox add "Need to fix memory leak in worker thread"
+  ```
 
 # Commands
 
@@ -186,13 +196,17 @@ _See code: [src/commands/run.ts](https://github.com/spacefall/misobox/blob/v0.1.
 
 - When using `misobox run`, you can add "--" to prevent misobox from parsing them:
 
-  ```sh-session
-  $ misobox run ping -c 4 example.com   # -c will be parsed by ping and miso
+  ```sh
+  # -c will be parsed by ping and misobox
+  misobox run ping -c 4 example.com
 
-  $ misobox run -- ping -c 4 example.com  # -c will be parsed only by ping
+  # -c will be parsed only by ping
+  misobox run -- ping -c 4 example.com
   ```
 
-- misobox stores its data in a JSON Lines file compressed with GZip, to speed up the process of saving data, misobox compresses just the current line with GZip and then appends it.  
-  To recompress everything, just run `misobox remove` (even without selecting anything).
+- misobox stores its data in a GZip compressed JSONL file.
+  To make file operations faster, misobox only compresses a note when it's added, the file is never recompressed with normal use.
+  To fix this, `misobox remove` will recompress the whole file after removing the selected notes (if no notes are selected it will just recompress the file).
 
-- Because of how node.js handles stdout/stderr if the application you're passing to misobox is printing a lot, very quickly, errors may get buffered and printed later than normal. Unfortunally I don't know how to fix this.
+- Sometimes stdout and stderr are misalligned, this happens when a command is printing a lot of data quickly because of how node buffers stdout and stderr.
+  Unfortunally, I haven't found a way to fix this yet, but I'm open to suggestions.
